@@ -23,17 +23,17 @@ public class UserService implements UserServiceApi {
 
     @Override
     public Boolean checkUserExists(UserEntity user) {
-        return false;
+        return userRepository.findByUserEmail(user.getUserEmail()) != null;
     }
 
     @Override
     public UserEntity getUser(UUID userId) {
-        return null;
+        return userRepository.findById(userId).orElse(null);
     }
 
     @Override
     public List<UserEntity> getAllUsers() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     public UserEntity updateUser(UserEntity user) {

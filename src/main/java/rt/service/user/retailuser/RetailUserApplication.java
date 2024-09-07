@@ -11,6 +11,3 @@ public class RetailUserApplication {
     }
 
 }
-//-add user [registration]
-//-list users
-//-view user

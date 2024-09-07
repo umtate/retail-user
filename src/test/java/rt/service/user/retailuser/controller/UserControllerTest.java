@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import rt.service.user.retailuser.entity.UserEntity;
 import rt.service.user.retailuser.service.api.UserServiceApi;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,6 +116,34 @@ public class UserControllerTest {
         var result = mockMvc.perform(request);
 
         result.andExpect(status().is4xxClientError()).andReturn();
+    }
+
+    @Test
+    void whenGetUsers_thenReturnListOfUsers() throws Exception {
+
+        var request = MockMvcRequestBuilders.get("/users")
+                .contentType("application/json");
+
+        when(service.getAllUsers()).thenReturn(List.of(mock(UserEntity.class)));
+
+        var result = mockMvc.perform(request);
+
+        result.andExpect(status().isOk()).andReturn();
+    }
+
+    @Test
+    void whenGetUser_thenReturnUser() throws Exception {
+
+        var id = UUID.randomUUID().toString();
+
+        var request = MockMvcRequestBuilders.get("/users/" + id)
+                .contentType("application/json");
+
+        when(service.getUser(any(UUID.class))).thenReturn(mock(UserEntity.class));
+
+        var result = mockMvc.perform(request);
+
+        result.andExpect(status().isOk()).andReturn();
     }
 }
 
