@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.annotation.RestController;
 import rt.service.user.retailuser.entity.UserEntity;
 import rt.service.user.retailuser.service.api.UserServiceApi;
+import rt.service.user.retailuser.service.api.UserVerificationServiceApi;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,9 @@ public class UserControllerTest {
 
     @MockBean
     private UserServiceApi service;
+
+    @MockBean
+    private UserVerificationServiceApi verificationServiceApi;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -90,7 +94,8 @@ public class UserControllerTest {
                 .contentType("application/json")
                 .content(serialized);
 
-        when(service.createUser(any(UserEntity.class))).thenReturn(UserEntity.builder().userId(UUID.randomUUID()).build());
+        when(service.createUser(any(UserEntity.class)))
+                .thenReturn(UserEntity.builder().userId(UUID.randomUUID()).build());
 
         var result = mockMvc.perform(request);
 
@@ -111,7 +116,7 @@ public class UserControllerTest {
                 .contentType("application/json")
                 .content(serialized);
 
-        when(service.checkUserExists(any(UserEntity.class))).thenReturn(true);
+        when(verificationServiceApi.checkUserExistsByEmail(any(String.class))).thenReturn(true);
 
         var result = mockMvc.perform(request);
 

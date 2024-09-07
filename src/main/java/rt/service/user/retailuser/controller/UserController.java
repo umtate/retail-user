@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import rt.service.user.retailuser.entity.UserEntity;
 import rt.service.user.retailuser.service.api.UserServiceApi;
+import rt.service.user.retailuser.service.api.UserVerificationServiceApi;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,15 +20,17 @@ import java.util.UUID;
 public class UserController {
 
     private final UserServiceApi service;
+    public final UserVerificationServiceApi verification;
 
-    public UserController(UserServiceApi service) {
+    public UserController(UserServiceApi service, UserVerificationServiceApi verification) {
         this.service = service;
+        this.verification = verification;
     }
 
     @PostMapping( consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> createUser(@RequestBody @Valid UserEntity user ) {
 
-         if(service.checkUserExists(user))
+         if(verification.checkUserExistsByEmail(user.getUserEmail()))
              return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("User already exists");
 
         var result = service.createUser(user);

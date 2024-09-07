@@ -9,8 +9,6 @@ public interface UserServiceApi {
 
     UserEntity createUser(UserEntity user);
 
-    Boolean checkUserExists(UserEntity user);
-
     UserEntity getUser(UUID userId);
 
     List<UserEntity> getAllUsers();
